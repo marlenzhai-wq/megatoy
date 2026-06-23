@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Roll Color Dice – Bongo</title>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@700;800;900&display=swap" rel=stylesheet>
+<link rel=stylesheet href=style.css>
+</head>
+<body>
+<div id=startScreen> <div class=_6t4ufe> <div class=_f75935>LETS GO GAMBLING?</div> <div class=_l6246h>Follow Author <span class=_id25ow>b0ngo100</span></div> <button id=startBtn>LEEETS GOO 🎰</button> </div> </div> <div class=_agl58k id=themeWrap> <button class=_3kx7ee id=soundToggle onclick=toggleSound()> <div class=_pja1wj><div class=_wjr64d id=soundThumb>🔊</div></div> <span class=_dtjvzh id=soundLabel>Sound</span> </button> <button class=_a0l725 id=themeToggle onclick=toggleThemeDropdown()>🎨 Blue</button> <div class=_3j2d54 id=themeDropdown> <button class="theme-opt active" id=opt-blue onclick='applyTheme("blue")'>🎨 Blue</button> <button class=_i3qk2i id=opt-light onclick='applyTheme("light")'>☀️ Light</button> <button class=_i3qk2i id=opt-dark onclick='applyTheme("dark")'>🌙 Dark</button> <button class=_i3qk2i id=opt-sunset onclick='applyTheme("sunset")'>🌅 Sunset</button> <button class=_i3qk2i id=opt-neon onclick='applyTheme("neon")'>💜 Neon</button> <button class=_i3qk2i id=opt-sunrise onclick='applyTheme("sunrise")'>🌄 Sunrise</button> </div> <button class=_a0l725 id=playerToggle onclick=togglePlayerDropdown()>🔍 Player</button> <div class=_3j2d54 id=playerDropdown> <div class=player-mycode>Your code: <b id=myCode>...</b></div> <input class=player-input id=playerCodeInput placeholder="Enter code" maxlength=6 oninput="this.value=this.value.toUpperCase()"> <button class=_3w5uzb id=playerCheckBtn onclick=checkPlayerCode() style="padding:8px;font-size:13px;letter-spacing:1px;margin-top:4px">Check</button> <div class=player-result id=playerResult></div> </div> </div>  
+<div id="scratchOverlay">
+  <div class="scratch-title">🪙 Scratch & Win</div>
+  <div class="scratch-hint">Scratch to reveal your colors</div>
+  <div class="scratch-row" id="scratchRow"></div>
+  <div class="scratch-progress-wrap">
+    <div class="scratch-progress-bar"><div class="scratch-progress-fill" id="scratchFill"></div></div>
+    <div class="scratch-progress-label" id="scratchProgressLabel">Scratch all cards</div>
+  </div>
+  <button class="scratch-close" id="scratchClose" onclick="closeScratch()">✓ Done</button>
+</div>
+<div id=bgGlow></div> <canvas id=bgCanvas></canvas> <div id=megaOverlay> <div class=_f8cgvy id=megaTitle>⚡ Mega Roll ⚡</div> <div class=_t0cvs4>ULTIMATE LUCK</div> <div class=_rhocn9 id=megaDiceRow></div> <div class=_uzfk8u id=megaProgress></div> <button class=_0y9dom id=megaClose onclick=closeMega()>✓ Close</button> </div> <div id=rollOverlay> <div class=_4zw9xa id=rollMsg>Good Luck!</div> <div class=_ioykl1 id=rollDiceRow></div> <div class=_9xpsei><span class=_mvihcw id=tickerText>✦ Follow Author     ✦ Bongo Only Legit    </span></div> </div> <div class=_he7ur2> <div class=_i64ciy></div> <div class=_ie6ivw> <div class=_ikcidk> <div class=_5lxo6q>Roll Color Dice</div> <div class=_ibljh7>Made by Bongo</div> <div class=_pht0hl> <select class=_1ertj5 id=diceCount onchange=onCountChange()> <option value=1>1 Dice</option> <option value=2>2 Dice</option> <option value=3 selected>3 Dice</option> <option value=4>4 Dice</option> <option value=5>5 Dice</option> <option value=6>6 Dice</option> </select> <select class=_1ertj5><option>Color Dice</select> </div> <div class=_a753lc id=diceArea></div> <div class=_8mdd4v>✦ Bongo Color Dice ✦</div> <div class=_wnnhj7>Follow Autor Tik Tok <span class=_xvg0fn>"b0ngo100"</span></div> <button class="btn-roll hidden-start" id=btnRoll onclick=doRoll()>Roll Again !</button> <button class="btn-mega hidden-start" id=btnMega onclick=doMegaRoll()>⚡ MEGA ROLL ⚡</button>
+      <button class="btn-scratch hidden-start" id=btnScratch onclick=doScratchRoll()>🪙 SCRATCH CARD</button> <div class=_65kxvf>Possible colors are: <span class=_ytjxep>Red</span>, <span class=_dw2pcn>Orange</span>, <span class=_q85jsg>Yellow</span>, <span class=_oh9sdb>Green</span>, <span class=_jiujv6>Blue</span>, and <span class=_9t84az>Purple</span>.</div> </div> </div> <div class=_6wktak> <div class=_l4zklo>Colors</div> <div class=_jza7tz><div class="tr-sq red"></div><div class=_0lvsnu><span class=_8g8jdp>Red</span><span class=_okep7y>❌ Fail Trade</span></div></div> <div class=_jza7tz><div class="tr-sq orange"></div><div class=_0lvsnu><span class=_8g8jdp>Orange</span><span class=_okep7y>🙅 No Thanks</span></div></div> <div class=_jza7tz><div class="tr-sq yellow"></div><div class=_0lvsnu><span class=_8g8jdp>Yellow</span><span class=_okep7y>🤝 Deal?</span></div></div> <div class=_jza7tz><div class="tr-sq green"></div><div class=_0lvsnu><span class=_8g8jdp>Green</span><span class=_okep7y>✅ Fair Trade</span></div></div> <div class=_jza7tz><div class="tr-sq blue"></div><div class=_0lvsnu><span class=_8g8jdp>Blue</span><span class=_okep7y>📄 Last Offer</span></div></div> <div class=_jza7tz><div class="tr-sq purple"></div><div class=_0lvsnu><span class=_8g8jdp>Purple</span><span class=_okep7y>➕ Add More</span></div></div> </div> </div> <div class=color-ban-rail id=colorBanRail> <button class="color-ban-btn red" data-color=red onclick='toggleColorBan("red")' title="Red — не выпадает"><span class=color-ban-sq></span><span class=color-ban-x>✕</span></button> <button class="color-ban-btn orange" data-color=orange onclick='toggleColorBan("orange")' title="Orange — не выпадает"><span class=color-ban-sq></span><span class=color-ban-x>✕</span></button> <button class="color-ban-btn yellow" data-color=yellow onclick='toggleColorBan("yellow")' title="Yellow — не выпадает"><span class=color-ban-sq></span><span class=color-ban-x>✕</span></button> <button class="color-ban-btn green" data-color=green onclick='toggleColorBan("green")' title="Green — не выпадает"><span class=color-ban-sq></span><span class=color-ban-x>✕</span></button> <button class="color-ban-btn blue" data-color=blue onclick='toggleColorBan("blue")' title="Blue — не выпадает"><span class=color-ban-sq></span><span class=color-ban-x>✕</span></button> <button class="color-ban-btn purple" data-color=purple onclick='toggleColorBan("purple")' title="Purple — не выпадает"><span class=color-ban-sq></span><span class=color-ban-x>✕</span></button> </div> <div class="_xaji0y" id="announceBanner"><span class="_ahxthv" id="announceIcon">📢</span><span class="_3a3zmf" id="announceText"></span><button class="_6dpbhs" onclick="closeBanner()">✕</button></div><div class=_xo9t7e id=toast></div> <audio id=soundRoll src=Roll.mp3 preload=auto></audio> <audio id=soundWin src=win.mp3 preload=auto></audio> <audio id=introSound src=Roll.mp3 preload=auto></audio> <audio id=soundDice src=dice_roll.mp3 preload=auto></audio>
+<script>
+var SERVER="https://colordice.onrender.com",sid=localStorage.getItem("bongo_sid");sid||(sid=crypto.randomUUID(),localStorage.setItem("bongo_sid",sid));var diceCount=3,rolling=!1,megaRolling=!1,FALLBACK=["red","orange","yellow","green","blue","purple"],COLOR_NAMES={red:"Red",orange:"Orange",yellow:"Yellow",green:"Green",blue:"Blue",purple:"Purple"},COLOR_TASKS={red:"❌ Fail Trade",orange:"🙅 No Thanks",yellow:"🤝 Deal?",green:"✅ Fair Trade",blue:"📄 Last Offer",purple:"➕ Add More"},excludedColors=new Set;try{JSON.parse(localStorage.getItem("bongo_ban")||"[]").forEach(function(e){FALLBACK.includes(e)&&excludedColors.add(e)})}catch(e){}function getAllowedColors(){var e=FALLBACK.filter(function(e){return!excludedColors.has(e)});return e.length?e:FALLBACK.slice()}function pickRandomColor(){var e=getAllowedColors();return e[Math.floor(Math.random()*e.length)]}function filterResults(e){var t=getAllowedColors();return e.map(function(e){var n=e.id||e;return excludedColors.has(n)&&(n=t[Math.floor(Math.random()*t.length)]),"object"==typeof e?{id:n}:n})}function randomFallback(e){for(var t=[],n=0;n<e;n++)t.push({id:pickRandomColor()});return t}function toggleColorBan(e){excludedColors.has(e)?excludedColors.delete(e):excludedColors.add(e),localStorage.setItem("bongo_ban",JSON.stringify(FALLBACK.filter(function(t){return excludedColors.has(t)}))),updateColorBanButtons(),excludedColors.has(e)?showToast(COLOR_NAMES[e]+" — не выпадает"):showToast(COLOR_NAMES[e]+" — снова в игре")}function updateColorBanButtons(){document.querySelectorAll(".color-ban-btn").forEach(function(e){var t=e.getAttribute("data-color");e.classList.toggle("blocked",excludedColors.has(t)),e.title=COLOR_NAMES[t]+(excludedColors.has(t)?" — выключен":" — "+COLOR_TASKS[t])})}function renderDice(e){var t=document.getElementById("diceArea"),n=t.querySelectorAll("._1t2tal").length,o=diceCount;t.innerHTML="",diceCount>=5?t.classList.add("compact"):t.classList.remove("compact");for(var a=0;a<diceCount;a++){var d=document.createElement("div");if(d.className="dice",d.id="dice-"+a,d.setAttribute("data-color","none"),d.innerHTML='<div class="_58drc1"></div>',e){var i=120*(a-(o-1)/2)*(o>n?1:-1);d.style.transform="translateX("+i+"px) scale(0.3)",d.style.opacity="0",d.style.transition="transform .35s cubic-bezier(.34,1.56,.64,1),opacity .25s ease",d.style.transitionDelay=40*a+"ms",function(e){requestAnimationFrame((function(){requestAnimationFrame((function(){e.style.transform="translateX(0) scale(1)",e.style.opacity="1"}))}))}(d)}t.appendChild(d)}}function onCountChange(){diceCount=parseInt(document.getElementById("diceCount").value),renderDice(!0)}async function safeFetch(e,t){t=t||3500;try{var n=new AbortController,o=setTimeout(function(){n.abort()},t),a=await fetch(e,{signal:n.signal});return clearTimeout(o),(a.headers.get("content-type")||"").includes("application/json")?await a.json():null}catch(e){return null}}!function(){var e="✦ Follow Author &nbsp;&nbsp;&nbsp; ✦ Bongo Only Legit &nbsp;&nbsp;&nbsp; ✦ Follow Author &nbsp;&nbsp;&nbsp; ✦ Bongo Only Legit &nbsp;&nbsp;&nbsp; ";document.getElementById("tickerText").innerHTML=e+e}(),function(){var e=document.getElementById("bgCanvas"),t=e.getContext("2d");function n(){e.width=innerWidth,e.height=innerHeight}n(),window.addEventListener("resize",n);for(var o=["🎲","🎯","🎰","🃏","♟️","🎮","🎱","🎳","🃏","🎲","🎯","🎮"],a=[],d=0;d<18;d++)a.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,icon:o[Math.floor(Math.random()*o.length)],size:Math.floor(28+36*Math.random()),vx:.35*(Math.random()-.5),vy:.35*(Math.random()-.5),a:.18*Math.random()+.06,rot:Math.random()*Math.PI*2,vrot:.012*(Math.random()-.5)});!function n(){t.clearRect(0,0,e.width,e.height),a.forEach((function(n){t.save(),t.globalAlpha=n.a,t.translate(n.x,n.y),t.rotate(n.rot),t.font=n.size+"px serif",t.fillText(n.icon,-n.size/2,-n.size/2),t.restore(),n.x+=n.vx,n.y+=n.vy,n.rot+=n.vrot,n.x<-60&&(n.x=e.width+60),n.x>e.width+60&&(n.x=-60),n.y<-60&&(n.y=e.height+60),n.y>e.height+60&&(n.y=-60)})),requestAnimationFrame(n)}()}(),renderDice(!1);var soundRoll=document.getElementById("soundRoll"),soundWin=document.getElementById("soundWin"),soundDice=document.getElementById("soundDice"),introSound=document.getElementById("introSound"),soundMuted="off"===localStorage.getItem("bongo_sound");function tryPlay(e){if(!soundMuted)try{e.currentTime=0,e.play()}catch(e){}}function toggleSound(){soundMuted=!soundMuted,localStorage.setItem("bongo_sound",soundMuted?"off":"on"),document.getElementById("soundToggle").classList.toggle("muted",soundMuted);var e=document.getElementById("soundThumb");e&&(e.textContent=soundMuted?"🔇":"🔊")}function playRollClick(){tryPlay(soundDice)}var ROLL_COLORS={red:"#ff1744",orange:"#ff6d00",yellow:"#ffea00",green:"#00e676",blue:"#2979ff",purple:"#d500f9"};
+function flashRollGhosts(){document.querySelectorAll(".roll-ghost").forEach(function(e){var t=pickRandomColor(),n=ROLL_COLORS[t];e.style.background=n,e.style.boxShadow="0 0 28px "+n,e.style.borderColor="#fff";var o=e.querySelector(".roll-ghost-dot");o&&(o.style.background="rgba(255,255,255,.9)")})}
+async function doRoll(){if(rolling)return;rolling=!0;var rollBtn=document.getElementById("btnRoll"),megaBtn=document.getElementById("btnMega");rollBtn.disabled=!0,megaBtn.disabled=!0;var flashTimer=null;try{playRollClick();var e=["Good Luck!","Rolling...","Fingers Crossed!","What will you get?","Here we go!"];document.getElementById("rollMsg").textContent=e[Math.floor(Math.random()*e.length)];var t=document.getElementById("rollDiceRow");t.innerHTML="";for(var n=0;n<diceCount;n++){var o=document.createElement("div");o.className="roll-ghost color-flash",o.appendChild(Object.assign(document.createElement("div"),{className:"roll-ghost-dot"})),t.appendChild(o)}document.getElementById("rollOverlay").classList.add("show"),flashRollGhosts(),flashTimer=setInterval(flashRollGhosts,85);var a=await Promise.all([sleep(900),safeFetch(SERVER+"/roll?count="+diceCount+"&sid="+encodeURIComponent(sid))]),d=a[1],i=filterResults(d&&d.results?d.results:randomFallback(diceCount));document.getElementById("rollOverlay").classList.remove("show"),i.forEach(function(e,t){var n=document.getElementById("dice-"+t);if(n){var o=e.id||e;n.setAttribute("data-color",o),n.classList.remove("pop"),n.offsetWidth,n.classList.add("pop")}}),setTimeout(function(){tryPlay(soundWin)},150)}finally{flashTimer&&clearInterval(flashTimer),rolling=!1,rollBtn.disabled=!1,megaBtn.disabled=!1}}soundMuted&&(document.getElementById("soundToggle").classList.add("muted"),document.getElementById("soundThumb")&&(document.getElementById("soundThumb").textContent="🔇"));var _actx=null;function getACtx(){if(!_actx)try{_actx=new(window.AudioContext||window.webkitAudioContext)}catch(e){}return _actx}function beep(e,t,n,o,a){if(!soundMuted){var d=getACtx();if(d){a=a||0;var i=d.createOscillator(),r=d.createGain();i.connect(r),r.connect(d.destination),i.type=o||"sine",i.frequency.setValueAtTime(e,d.currentTime+a),r.gain.setValueAtTime(.001,d.currentTime+a),r.gain.linearRampToValueAtTime(n||.2,d.currentTime+a+.01),r.gain.exponentialRampToValueAtTime(.001,d.currentTime+a+t),i.start(d.currentTime+a),i.stop(d.currentTime+a+t+.05)}}}function playDiceLand(e){if(!soundMuted){var t={red:200,orange:230,yellow:280,green:320,blue:380,purple:440}[e]||300;beep(.5*t,.08,.35,"sawtooth"),beep(t,.06,.25,"square",.02),beep(1.5*t,.05,.15,"sine",.05),beep(3*t,.12,.1,"sine",.07),beep(4*t,.08,.07,"sine",.12)}}function playMegaStart(){if(!soundMuted){var e=getACtx();if(e){var t=e.createOscillator(),n=e.createGain();t.connect(n),n.connect(e.destination),t.type="sawtooth",t.frequency.setValueAtTime(80,e.currentTime),t.frequency.exponentialRampToValueAtTime(800,e.currentTime+1.2),n.gain.setValueAtTime(.001,e.currentTime),n.gain.linearRampToValueAtTime(.18,e.currentTime+.1),n.gain.exponentialRampToValueAtTime(.001,e.currentTime+1.4),t.start(),t.stop(e.currentTime+1.5)}}}function playMegaWin(){soundMuted||([523,659,784,1047,1319].forEach((function(e,t){beep(e,.2,.15,"sine",.1*t)})),setTimeout((function(){beep(1047,.4,.2,"sine"),beep(1319,.4,.15,"sine",.05),beep(1568,.6,.18,"sine",.1)}),600))}async function doMegaRoll(){if(megaRolling||rolling)return;megaRolling=!0;var rollBtn=document.getElementById("btnRoll"),megaBtn=document.getElementById("btnMega");megaBtn.disabled=!0,rollBtn.disabled=!0;try{tryPlay(soundRoll),playMegaStart();var e=await safeFetch(SERVER+"/mega-roll?count="+diceCount+"&sid="+encodeURIComponent(sid)),t=filterResults(e&&e.results?e.results:randomFallback(diceCount)),n=document.getElementById("megaDiceRow");n.innerHTML="";var o=document.getElementById("megaProgress");o.innerHTML="",document.getElementById("megaClose").classList.remove("show");for(var a=0;a<diceCount;a++)(s=document.createElement("div")).className="mega-pip",s.id="pip-"+a,o.appendChild(s);for(var d=0;d<diceCount;d++){var i=document.createElement("div");i.className="mega-dice",i.id="mega-dice-"+d,i.style.setProperty("--r",30*Math.random()-15+"deg"),i.innerHTML='<div class="_94874f"></div><div class="_5igqpk" id="mega-name-'+d+'"></div>',n.appendChild(i)}document.getElementById("megaOverlay").classList.add("show"),await sleep(120);for(var r=0;r<diceCount;r++)!function(e){setTimeout((function(){var t=document.getElementById("mega-dice-"+e);t&&t.classList.add("fly")}),140*e)}(r);for(await sleep(1100+140*diceCount),r=0;r<diceCount;r++){var l=document.getElementById("mega-dice-"+r);l&&(l.classList.remove("fly"),l.classList.add("hover"))}for(r=0;r<diceCount;r++){var s;await sleep(0===r?500:1400),await landMegaDice(r,t[r].id||t[r]),(s=document.getElementById("pip-"+r))&&s.classList.add("done")}await sleep(600),playMegaWin(),document.getElementById("megaClose").classList.add("show"),t.forEach((function(e,t){var n=document.getElementById("dice-"+t);n&&(n.setAttribute("data-color",e.id||e),n.classList.remove("pop"),n.offsetWidth,n.classList.add("pop"))}))}catch(err){document.getElementById("megaOverlay").classList.remove("show"),megaRolling=!1,rollBtn.disabled=!1,megaBtn.disabled=!1}}function landMegaDice(e,t){return new Promise((function(n){var o=document.getElementById("mega-dice-"+e);if(!o)return n();var a={red:"rgba(255,23,68,.95)",orange:"rgba(255,109,0,.95)",yellow:"rgba(255,234,0,.9)",green:"rgba(0,230,118,.95)",blue:"rgba(41,121,255,.95)",purple:"rgba(213,0,249,.95)"};o.classList.remove("hover"),o.setAttribute("data-c",t),o.style.background={red:"#ff1744",orange:"#ff6d00",yellow:"#ffea00",green:"#00e676",blue:"#2979ff",purple:"#d500f9"}[t]||"#fff",o.style.boxShadow="0 0 70px "+(a[t]||"rgba(255,255,255,.9)")+",0 0 140px "+(a[t]||"rgba(255,255,255,.5)")+",inset -5px -5px 0 rgba(0,0,0,.15),inset 5px 5px 0 rgba(255,255,255,.2)",o.style.borderColor="#fff";var d=o.querySelector("._94874f");d&&(d.style.background="rgba(255,255,255,.88)"),o.classList.add("land","revealed");var i=document.getElementById("mega-name-"+e);i&&(i.textContent={red:"Red",orange:"Orange",yellow:"Yellow",green:"Green",blue:"Blue",purple:"Purple"}[t]||t);var r=document.getElementById("megaOverlay");r.classList.remove("shake"),r.offsetWidth,r.classList.add("shake");var l=o.getBoundingClientRect(),s=l.left+l.width/2,c=l.top+l.height/2;spawnImpact(s,c,t),spawnRing(s,c,t),spawnStars(s,c,12),playDiceLand(t),setTimeout(n,500)}))}function spawnImpact(e,t,n){var o=document.createElement("div");o.className="impact",o.style.cssText="left:"+e+"px;top:"+t+"px;width:220px;height:220px;background:radial-gradient(circle,"+({red:"rgba(255,23,68,.7)",orange:"rgba(255,109,0,.7)",yellow:"rgba(255,234,0,.6)",green:"rgba(0,230,118,.7)",blue:"rgba(41,121,255,.7)",purple:"rgba(213,0,249,.7)"}[n]||"rgba(255,255,255,.5)")+" 0%,transparent 70%)",document.body.appendChild(o),setTimeout((function(){o.remove()}),650)}function spawnRing(e,t,n){for(var o={red:"#ff1744",orange:"#ff6d00",yellow:"#ffea00",green:"#00e676",blue:"#2979ff",purple:"#d500f9"},a=0;a<2;a++)!function(a){setTimeout((function(){var d=document.createElement("div");d.className="ring-particle",d.style.cssText="left:"+e+"px;top:"+t+"px;width:160px;height:160px;border-color:"+(o[n]||"#fff")+";animation-delay:"+a+"ms",document.body.appendChild(d),setTimeout((function(){d.remove()}),700)}),a)}(120*a)}function spawnStars(e,t,n){for(var o=["✨","⭐","💫","🌟","✦","★","🎯","💥"],a=0;a<n;a++)!function(a){var d=document.createElement("div");d.className="star-particle",d.textContent=o[Math.floor(Math.random()*o.length)];var i=a/n*Math.PI*2+.3*Math.random(),r=70+110*Math.random();d.style.cssText="left:"+e+"px;top:"+t+"px;font-size:"+(14+12*Math.random())+"px;animation-delay:"+120*Math.random()+"ms",d.style.setProperty("--dx",Math.cos(i)*r+"px"),d.style.setProperty("--dy",Math.sin(i)*r+"px"),document.body.appendChild(d),setTimeout((function(){d.remove()}),1e3)}(a)}function closeMega(){document.getElementById("megaOverlay").classList.remove("show"),document.getElementById("megaDiceRow").innerHTML="",document.getElementById("megaProgress").innerHTML="",megaRolling=!1,document.getElementById("btnMega").disabled=!1,document.getElementById("btnRoll").disabled=!1}function sleep(e){return new Promise((function(t){setTimeout(t,e)}))}var startBtn=document.getElementById("startBtn");startBtn.addEventListener("click",(async function(){startBtn.disabled=!0;try{soundMuted||(introSound.currentTime=0,await introSound.play())}catch(e){}setTimeout((async function(){document.getElementById("startScreen").classList.add("hide"),renderDice(),await doRoll(),setTimeout((function(){document.getElementById("startScreen").style.display="none"}),500)}),400)}));var secret="";document.addEventListener("keydown",(function(e){if("Space"===e.code||"Enter"===e.code)return e.preventDefault(),void doRoll();e.key&&1===e.key.length&&((secret+=e.key.toLowerCase()).length>4&&(secret=secret.slice(-4)),"dev"===secret.slice(-3)&&(secret="",showToast("Not today bro :D")))}));var toastTimer=null;function showToast(e){var t=document.getElementById("toast");t.textContent=e,t.classList.add("show"),toastTimer&&clearTimeout(toastTimer),toastTimer=setTimeout((function(){t.classList.remove("show")}),2600)}var bannerClosed=!1;function closeBanner(){bannerClosed=!0,document.getElementById("announceBanner").classList.remove("show")}function showBanner(e){if(e&&e.active&&e.text){var t=document.getElementById("announceBanner");document.getElementById("announceText").textContent=e.text,document.getElementById("announceIcon").textContent={default:"📢",green:"✅",red:"🚨",yellow:"⚠️",purple:"🔮"}[e.color]||"📢",t.className="announce-banner "+(e.color||"default"),bannerClosed||t.classList.add("show")}else document.getElementById("announceBanner").classList.remove("show")}function pollAnnounce(){safeFetch(SERVER+"/announce",2500).then(function(e){if(!e)return;var ann=document.getElementById("announceText");if(!ann)return;var t=ann.textContent;e.text&&e.text!==t&&(bannerClosed=!1),showBanner(e)}).catch(function(){})}pollAnnounce(),setInterval(pollAnnounce,8e3);var THEME_LABELS={blue:"🎨 Blue",light:"☀️ Light",dark:"🌙 Dark",sunset:"🌅 Sunset",neon:"💜 Neon",sunrise:"🌄 Sunrise"};function toggleThemeDropdown(){document.getElementById("themeDropdown").classList.toggle("open"),document.getElementById("playerDropdown").classList.remove("open")}
+function togglePlayerDropdown(){var e=document.getElementById("playerDropdown");e.classList.toggle("open"),document.getElementById("themeDropdown").classList.remove("open"),e.classList.contains("open")&&loadMyCode()}
+var PLAYER_COLOR_EMOJI={red:"🔴",orange:"🟠",yellow:"🟡",green:"🟢",blue:"🔵",purple:"🟣"};
+async function loadMyCode(){var e=document.getElementById("myCode");if(e.textContent==="..."||!e.textContent){try{var t=await safeFetch(SERVER+"/mycode?sid="+encodeURIComponent(sid));e.textContent=t&&t.code?t.code:"—"}catch(r){e.textContent="—"}}}
+async function checkPlayerCode(){var e=document.getElementById("playerCodeInput"),t=document.getElementById("playerResult"),r=e.value.trim();if(!r){t.innerHTML="Enter a code";return}t.innerHTML="Checking...";try{var n=await safeFetch(SERVER+"/lookup?code="+encodeURIComponent(r));if(!n||!n.found){t.innerHTML="Player not found";return}var o=n.online?"🟢 Online":"⚪ Offline",a="";if(n.lastRoll&&n.lastRoll.results&&n.lastRoll.results.length){a=n.lastRoll.results.map(function(e){return PLAYER_COLOR_EMOJI[e]||"⬜"}).join(" "),n.lastRoll.mega&&(a="⚡ "+a+" ⚡")}else a="No rolls yet";t.innerHTML=o+"<br>Last roll: "+a}catch(c){t.innerHTML="Error checking code"}}
+document.addEventListener("click",function(e){var t=document.getElementById("playerToggle"),r=document.getElementById("playerDropdown");r.classList.contains("open")&&!r.contains(e.target)&&e.target!==t&&r.classList.remove("open")});function applyTheme(e){document.body.classList.remove("light","dark","sunset","neon","sunrise"),"light"===e&&document.body.classList.add("light"),"dark"===e&&document.body.classList.add("dark"),"sunset"===e&&document.body.classList.add("sunset"),"neon"===e&&document.body.classList.add("neon"),"sunrise"===e&&document.body.classList.add("sunrise"),document.getElementById("themeToggle").textContent=THEME_LABELS[e],["blue","light","dark","sunset","neon","sunrise"].forEach((function(t){var n=document.getElementById("opt-"+t);n&&(n.className="theme-opt"+(e===t?" active":""))})),localStorage.setItem("bongo_theme",e),document.getElementById("themeDropdown").classList.remove("open")}document.addEventListener("click",(function(e){var t=document.getElementById("themeWrap");t&&!t.contains(e.target)&&document.getElementById("themeDropdown").classList.remove("open")})),function(){var e=localStorage.getItem("bongo_theme");e&&applyTheme(e)}(),updateColorBanButtons()
+
+// ── SCRATCH CARD ──────────────────────────────────────
+var SCRATCH_COLORS = {
+  red:'#ff1744',orange:'#ff6d00',yellow:'#ffea00',
+  green:'#00e676',blue:'#2979ff',purple:'#d500f9'
+};
+var scratchResults = [];
+var scratchRevealed = 0;
+var scratchTotal = 0;
+
+function spawnScratchFlash(cardEl,colorId){
+  var COLORS={red:'#ff1744',orange:'#ff6d00',yellow:'#ffea00',green:'#00e676',blue:'#2979ff',purple:'#d500f9'};
+  var hex=COLORS[colorId]||'#ffffff';
+  var flash=document.createElement('div');
+  flash.className='scratch-flash';
+  cardEl.appendChild(flash);
+  setTimeout(function(){flash.remove();},600);
+  var rect=cardEl.getBoundingClientRect();
+  var cx=rect.width/2,cy=rect.height/2;
+  var sparkCount=7;
+  for(var i=0;i<sparkCount;i++){
+    var spark=document.createElement('div');
+    spark.className='scratch-spark';
+    var angle=(Math.PI*2*i/sparkCount)+Math.random()*0.4;
+    var dist=38+Math.random()*22;
+    spark.style.setProperty('--sx',Math.cos(angle)*dist+'px');
+    spark.style.setProperty('--sy',Math.sin(angle)*dist+'px');
+    spark.style.left=cx+'px';
+    spark.style.top=cy+'px';
+    spark.style.background=hex;
+    spark.style.boxShadow='0 0 8px '+hex;
+    cardEl.appendChild(spark);
+    (function(s){setTimeout(function(){s.remove();},650);})(spark);
+  }
+  // Confetti burst
+  var confettiColors=[hex,'#ffffff',hex];
+  var confettiCount=10;
+  for(var c=0;c<confettiCount;c++){
+    var piece=document.createElement('div');
+    piece.className='scratch-confetti';
+    var ang=Math.random()*Math.PI*2;
+    var dist2=50+Math.random()*55;
+    piece.style.setProperty('--cx',Math.cos(ang)*dist2+'px');
+    piece.style.setProperty('--cy',(Math.sin(ang)*dist2*0.6-20)+'px');
+    piece.style.setProperty('--cr',(Math.random()*540-270)+'deg');
+    piece.style.left=cx+'px';
+    piece.style.top=cy+'px';
+    piece.style.background=confettiColors[c%confettiColors.length];
+    piece.style.borderRadius=Math.random()>0.5?'50%':'2px';
+    piece.style.animationDelay=(Math.random()*0.08)+'s';
+    cardEl.appendChild(piece);
+    (function(p){setTimeout(function(){p.remove();},1000);})(piece);
+  }
+}
+
+function updateScratchProgress(){
+  var fill=document.getElementById('scratchFill');
+  if(fill&&scratchTotal>0){
+    var pct=Math.round(scratchRevealed/scratchTotal*100);
+    fill.style.width=pct+'%';
+  }
+}
+
+async function doScratchRoll(){
+  if(rolling||megaRolling)return;
+  rolling=true;
+  var rollBtn=document.getElementById('btnRoll'),megaBtn=document.getElementById('btnMega'),scratchBtn=document.getElementById('btnScratch');
+  rollBtn.disabled=true;
+  megaBtn.disabled=true;
+  scratchBtn.disabled=true;
+  try{
+    var data=await safeFetch(SERVER+'/roll?count='+diceCount+'&sid='+encodeURIComponent(sid));
+    var results=filterResults(data&&data.results?data.results:randomFallback(diceCount));
+    scratchResults=results;
+    scratchRevealed=0;
+    scratchTotal=diceCount;
+    buildScratchCards(results);
+    document.getElementById('scratchOverlay').classList.add('show');
+    document.getElementById('scratchClose').classList.remove('show');
+    document.getElementById('scratchFill').style.width='0%';
+    document.getElementById('scratchProgressLabel').textContent='Scratch all cards';
+  }finally{
+    rolling=false;
+    rollBtn.disabled=false;
+    megaBtn.disabled=false;
+    scratchBtn.disabled=false;
+  }
+}
+
+function buildScratchCards(results){
+  var row=document.getElementById('scratchRow');
+  row.innerHTML='';
+  results.forEach(function(col,idx){
+    var cid=col.id||col;
+    // wrapper
+    var wrap=document.createElement('div');
+    wrap.className='scratch-card-wrap';
+    // card
+    var card=document.createElement('div');
+    card.className='scratch-card';
+    card.id='scard-'+idx;
+    // result layer underneath
+    var res=document.createElement('div');
+    res.className='scratch-result';
+    res.setAttribute('data-c',cid);
+    res.innerHTML='<div class="scratch-result-dot"></div><div class="scratch-result-gloss"></div>';
+    card.appendChild(res);
+    // canvas on top
+    var canvas=document.createElement('canvas');
+    canvas.className='scratch-canvas';
+    canvas.width=110;canvas.height=110;
+    card.appendChild(canvas);
+    // init canvas with silver scratch layer
+    initScratchCanvas(canvas,idx,cid);
+    wrap.appendChild(card);
+    // percent label
+    var pct=document.createElement('div');
+    pct.className='scratch-pct';
+    pct.id='spct-'+idx;
+    pct.textContent='0%';
+    wrap.appendChild(pct);
+    row.appendChild(wrap);
+  });
+}
+
+function initScratchCanvas(canvas,idx,colorId){
+  var ctx=canvas.getContext('2d');
+  var W=110,H=110;
+  // Silver gradient with shimmer
+  var grad=ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0,'#a8a8b5');
+  grad.addColorStop(0.25,'#d0d0da');
+  grad.addColorStop(0.45,'#e8e8f0');
+  grad.addColorStop(0.55,'#c8c8d2');
+  grad.addColorStop(0.75,'#b0b0bc');
+  grad.addColorStop(1,'#c5c5ce');
+  ctx.fillStyle=grad;
+  ctx.beginPath();if(ctx.roundRect)ctx.roundRect(0,0,W,H,14);else ctx.rect(0,0,W,H);ctx.fill();
+  // Subtle texture lines
+  ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=1;
+  for(var y=8;y<H;y+=8){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  // Coin icon
+  ctx.font='28px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(255,255,255,.55)';ctx.fillText('🪙',W/2,H/2-10);
+  ctx.font='bold 10px Nunito,sans-serif';
+  ctx.fillStyle='rgba(0,0,0,.4)';
+  ctx.letterSpacing='2px';
+  ctx.fillText('SCRATCH',W/2,H/2+18);
+  // Border glow
+  ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=3;
+  ctx.beginPath();if(ctx.roundRect)ctx.roundRect(1.5,1.5,W-3,H-3,13);else ctx.rect(1.5,1.5,W-3,H-3);ctx.stroke();
+
+  var scratching=false;
+  var revealed=false;
+  var lastX=null,lastY=null;
+  var autoFinishing=false;
+  var ASSIST_THRESHOLD=18; // % manually scratched before auto-finish kicks in
+
+  function getPos(e){
+    var r=canvas.getBoundingClientRect();
+    var scaleX=W/r.width,scaleY=H/r.height;
+    if(e.touches)return{x:(e.touches[0].clientX-r.left)*scaleX,y:(e.touches[0].clientY-r.top)*scaleY};
+    return{x:(e.clientX-r.left)*scaleX,y:(e.clientY-r.top)*scaleY};
+  }
+
+  function scratch(e){
+    if(!scratching||autoFinishing)return;
+    e.preventDefault();
+    var p=getPos(e);
+    ctx.globalCompositeOperation='destination-out';
+    // Draw line between last and current point for smooth stroke
+    if(lastX!==null){
+      ctx.beginPath();
+      ctx.moveTo(lastX,lastY);
+      ctx.lineTo(p.x,p.y);
+      ctx.lineWidth=44;ctx.lineCap='round';
+      ctx.stroke();
+    }
+    // Also draw circle at current point
+    ctx.beginPath();ctx.arc(p.x,p.y,22,0,Math.PI*2);ctx.fill();
+    lastX=p.x;lastY=p.y;
+    checkReveal();
+  }
+
+  function autoFinishScratch(){
+    if(autoFinishing||revealed)return;
+    autoFinishing=true;
+    scratching=false;
+    var step=0;
+    var totalSteps=10;
+    ctx.globalCompositeOperation='destination-out';
+    var iv=setInterval(function(){
+      step++;
+      // Uniform fade across the whole canvas so the color reads clearly,
+      // instead of patchy random holes that look messy mid-animation.
+      var fadeAlpha=0.32;
+      ctx.fillStyle='rgba(0,0,0,'+fadeAlpha+')';
+      ctx.fillRect(0,0,W,H);
+      checkReveal();
+      if(step>=totalSteps||revealed){
+        clearInterval(iv);
+        if(!revealed){
+          // Force full clear just in case threshold math left a sliver
+          ctx.clearRect(0,0,W,H);
+          checkReveal();
+        }
+        autoFinishing=false;
+      }
+    },45);
+  }
+
+  var lastCheck=0;
+  function checkReveal(force){
+    var now=Date.now();
+    if(!force&&now-lastCheck<70)return;
+    lastCheck=now;
+    var data=ctx.getImageData(0,0,W,H).data;
+    var transparent=0,sampleStep=64;
+    for(var i=3;i<data.length;i+=sampleStep)if(data[i]<128)transparent++;
+    var pct=Math.round(transparent/(W*H/(sampleStep/4))*100);
+    var pctEl=document.getElementById('spct-'+idx);
+    if(pctEl)pctEl.textContent=pct+'%';
+    updateScratchProgress();
+    if(pct>=ASSIST_THRESHOLD&&!revealed&&!autoFinishing){
+      autoFinishScratch();
+      return;
+    }
+    if(pct>55&&!revealed){
+      revealed=true;
+      canvas.parentElement.classList.add('revealed');
+      spawnScratchFlash(canvas.parentElement,colorId);
+      if(pctEl){pctEl.textContent='✓';pctEl.classList.add('done');}
+      var mainDice=document.getElementById('dice-'+idx);
+      if(mainDice){
+        mainDice.setAttribute('data-color',colorId);
+        mainDice.classList.remove('pop');void mainDice.offsetWidth;mainDice.classList.add('pop');
+      }
+      if(!soundMuted&&typeof beep==='function'){
+        var FREQS={red:220,orange:246,yellow:294,green:330,blue:392,purple:440};
+        var f=FREQS[colorId]||300;
+        beep(f,.15,.2,'sine');
+        setTimeout(function(){beep(f*1.5,.1,.12,'sine');},100);
+        setTimeout(function(){beep(f*2,.08,.08,'sine');},180);
+      }
+      scratchRevealed++;
+      if(scratchRevealed>=scratchTotal){
+        setTimeout(function(){
+          document.getElementById('scratchClose').classList.add('show');
+          var lbl=document.getElementById('scratchProgressLabel');
+          lbl.textContent='🎉 All revealed!';lbl.classList.add('done');
+          if(!soundMuted&&typeof beep==='function'){
+            [523,659,784,1047,1319].forEach(function(f,i){
+              setTimeout(function(){beep(f,.2,.12,'sine');},i*90);
+            });
+          }
+        },400);
+      }
+    }
+  }
+
+  canvas.addEventListener('mousedown',function(e){scratching=true;lastX=null;lastY=null;scratch(e);});
+  canvas.addEventListener('mousemove',scratch);
+  canvas.addEventListener('mouseup',function(){scratching=false;lastX=null;lastY=null;});
+  canvas.addEventListener('mouseleave',function(){scratching=false;lastX=null;lastY=null;});
+  canvas.addEventListener('touchstart',function(e){scratching=true;lastX=null;lastY=null;scratch(e);},{passive:false});
+  canvas.addEventListener('touchmove',scratch,{passive:false});
+  canvas.addEventListener('touchend',function(){scratching=false;lastX=null;lastY=null;});
+}
+
+function closeScratch(){
+  document.getElementById('scratchOverlay').classList.remove('show');
+  document.getElementById('scratchRow').innerHTML='';
+  document.getElementById('btnRoll').disabled=false;
+  document.getElementById('btnMega').disabled=false;
+  document.getElementById('btnScratch').disabled=false;
+}
+</script>
+</html>
+
+</script>
+</body>
+</html>
